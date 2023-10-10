@@ -33,25 +33,25 @@ namespace HealthProject___Nathan_Peach
 
             //game start
             Console.WriteLine();
-            ShowHud();
+            ShowHUD();
             TakeDamage(50);
-            ShowHud();
+            ShowHUD();
             TakeDamage(75);
-            ShowHud();
+            ShowHUD();
             TakeDamage(10);
-            ShowHud();
+            ShowHUD();
             TakeDamage(75);
-            ShowHud();
+            ShowHUD();
             TakeDamage(175);
-            ShowHud();
+            ShowHUD();
             TakeDamage(200);
-            ShowHud();
+            ShowHUD();
             TakeDamage(200);
-            ShowHud();
+            ShowHUD();
             TakeDamage(200);
-            ShowHud();
+            ShowHUD();
         }
-        static void ShowHud()
+        static void ShowHUD()
         {
             //turn starts
             Console.WriteLine("Health: "+health+" Shield: "+shield+" Lives: "+lives);
