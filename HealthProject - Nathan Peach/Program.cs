@@ -29,39 +29,31 @@ namespace HealthProject___Nathan_Peach
                 xp = 0;
                 maxxp = 100;
                 level = 1;
-                healthStatus = "perfect";
+                healthStatus = "Perfect Health";
             }
             //ResetGame also needs to be called before the first ShowHUD, in order to display correctly
             //initialization
 
             //game start
             ResetGame();
-            Console.WriteLine();
+            Console.WriteLine("");
+            //It would be way more convenient to have Revive and StatusCheck be called at the beginning of ShowHUD instead, but I'm not sure if I'm allowed to do that for the assignment.
+            //The only reason StatusCheck and Revive are methods is because I'm pretty sure I'm not allowed to call Revive inside of TakeDamage, and StatusCheck inside of ShowHUD.
+            Revive();
+            StatusCheck();
             ShowHUD();
             TakeDamage(50);
-            ShowHUD();
-            TakeDamage(75);
-            ShowHUD();
-            TakeDamage(10);
-            ShowHUD();
-            TakeDamage(75);
-            ShowHUD();
-            TakeDamage(175);
-            ShowHUD();
-            TakeDamage(200);
-            ShowHUD();
-            TakeDamage(200);
-            ShowHUD();
-            TakeDamage(200);
-            ShowHUD();
         
         }
         static void ShowHUD()
         {
-            //turn starts
+            Console.WriteLine("");
             Console.WriteLine("Health: "+health+" Shield: "+shield+" Lives: "+lives);
             Console.WriteLine("");
             Console.WriteLine("XP: "+xp+"/"+maxxp+" Level: "+level);
+            Console.WriteLine("");
+            Console.WriteLine("Current Health Status: " + healthStatus);
+            Console.WriteLine("");
             Console.ReadKey(true);
             
         
@@ -93,13 +85,45 @@ namespace HealthProject___Nathan_Peach
                     shield = 0;
                 }
             }
-            //if enough damage is dealt to lower health to zero or lower, take away one life and reset hp and shield values
+            if (health <= 0) 
+            {
+                health = 0;
+            }
+        }
+        static void StatusCheck()
+        {
+            if ((health <= 100) && (health >= 90))
+            {
+                healthStatus = "Perfect Health";
+            }
+            if ((health < 90) && (health >= 75))
+            {
+                healthStatus = "Healthy";
+            }
+            if ((health < 75) && (health >= 50))
+            {
+                healthStatus = "Hurt";
+            }
+            if ((health < 50) && (health >= 10))
+            {
+                healthStatus = "Badly Hurt";
+            }
+            if (health < 10)
+            {
+                healthStatus = "Imminent Danger";
+            }
+        }
+        static void Revive()
+        {
+            //if health is at zero, reset health and shield to default values and take away one life.
             if (health <= 0)
             {
                 lives -= 1;
                 health = 100;
                 shield = 100;
-                //then, if lives are also equal to zero, end the game after pressing any key
+                Console.WriteLine("You lost a life!");
+                Console.ReadKey(true);
+                //if lives are also equal to zero, end the game after pressing any key
                 if (lives <= 0)
                 {
                     Console.WriteLine("");
@@ -111,8 +135,12 @@ namespace HealthProject___Nathan_Peach
                 }
             }
         }
-    static void Heal(int healing)
+        static void Heal(int healing)
         {
+            if (healing < 0)
+            {
+                Console.WriteLine("ERROR: ","Heal"," does not accept negative values");
+            }
             health += healing;
             //checks to make sure health never stays over 100 (the hard-coded maximum hp value).
             if (health >= 100)
@@ -122,6 +150,10 @@ namespace HealthProject___Nathan_Peach
         }
     static void RegenerateShield(int regen)
         {
+            if (regen < 0)
+            {
+                Console.WriteLine("ERROR: ","RegenerateShield"," does not accept negative values");
+            }
             shield += regen;
             //checks to make sure shield never stays over 100 (the hard-coded maximum shield value).
             if (shield >= 100)
@@ -131,6 +163,10 @@ namespace HealthProject___Nathan_Peach
         }
     static void IncreaseXP(int gain)
         {
+            if (gain < 0)
+            {
+                Console.WriteLine("ERROR: ","IncreaseXP"," does not accept negative values");
+            }
             xp += gain;
             if (xp >= maxxp)  
             {
