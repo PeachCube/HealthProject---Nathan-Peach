@@ -9,7 +9,6 @@ namespace HealthProject___Nathan_Peach
     internal class Program
     {
         //declaration
-        static int totalHP;
         static int health;
         static int shield;
         static string healthStatus;
@@ -21,17 +20,22 @@ namespace HealthProject___Nathan_Peach
         static void Main(string[] args)
         {
             //initialization
-            health = 100 ;
-            shield = 100;
-            totalHP = health + shield;
-            lives = 3;
-            xp = 0;
-            maxxp = 100;
-            level = 1;
-            healthStatus = "perfect";
+            //"ResetGame" is basically just "SetGame", since both methods would serve the same purpose of setting the value of variables either after a restart, or at the start of the game.
+            void ResetGame()
+            {
+                health = 100;
+                shield = 100;
+                lives = 3;
+                xp = 0;
+                maxxp = 100;
+                level = 1;
+                healthStatus = "perfect";
+            }
+            //ResetGame also needs to be called before the first ShowHUD, in order to display correctly
             //initialization
 
             //game start
+            ResetGame();
             Console.WriteLine();
             ShowHUD();
             TakeDamage(50);
@@ -50,11 +54,14 @@ namespace HealthProject___Nathan_Peach
             ShowHUD();
             TakeDamage(200);
             ShowHUD();
+        
         }
         static void ShowHUD()
         {
             //turn starts
             Console.WriteLine("Health: "+health+" Shield: "+shield+" Lives: "+lives);
+            Console.WriteLine("");
+            Console.WriteLine("XP: "+xp+"/"+maxxp+" Level: "+level);
             Console.ReadKey(true);
             
         
@@ -64,6 +71,10 @@ namespace HealthProject___Nathan_Peach
         }
     static void TakeDamage(int damage)
         {
+            if (damage < 0)
+            {
+                Console.WriteLine("ERROR: ","TakeDamage"," does not accept negative values");
+            }
             //if the shield was depleted in a previous turn, set shield to zero
             //damage will then deplete health
             if (shield <= 0)
@@ -102,24 +113,33 @@ namespace HealthProject___Nathan_Peach
         }
     static void Heal(int healing)
         {
-
+            health += healing;
+            //checks to make sure health never stays over 100 (the hard-coded maximum hp value).
+            if (health >= 100)
+            {
+                health = 100;
+            }
         }
     static void RegenerateShield(int regen)
         {
-
+            shield += regen;
+            //checks to make sure shield never stays over 100 (the hard-coded maximum shield value).
+            if (shield >= 100)
+            {
+                shield = 100;
+            }
         }
     static void IncreaseXP(int gain)
         {
             xp += gain;
             if (xp >= maxxp)  
             {
-                xp = 0;
+                xp -= maxxp;
                 level += 1;
-                maxxp *= 1.25f;
-                //every time you level up, the xp required to level up increases exponentially -> 100 -> 125 -> 156.25 -> 195.3125
-                //it doesn't result in nice numbers for max hp but i don't really mind it.
+                maxxp += 100;
+                //when xp is equal to maxxp, reset xp count (lowers the xp count by the maxxp so gaining 50 xp and 90 xp while at level 1 doesn't waste 40 xp) and increase level by 1.
+                //every time you level up, the xp required to level up increases -> 100 -> 200 -> 300, etcetera.
                 Console.WriteLine("You Leveled Up!");
-                //if you have 90 xp and gain 20, 10 xp is lost. You also can't level up multiple times by gaining 200 xp at once.
             }
         }
     }
